@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.UnknownHostException;
 
 @RestController
-@RequestMapping(ApplicationConstant.EXTERNAL_CONTEXT_ROOT)
+//@RequestMapping(ApplicationConstant.EXTERNAL_CONTEXT_ROOT)
 public class BapSelectController {
 	private static final Logger logger = LoggerFactory.getLogger(BapSelectController.class);
 	@Autowired
@@ -35,13 +35,13 @@ public class BapSelectController {
 	@Value("${bap.no.mentor.data}")
 	private String selectErrResponse;
 
-	@GetMapping("/select")
-	private ResponseEntity<String> select(@RequestParam("id") String mentorId, @RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException {
+	@PostMapping("/select")
+	private ResponseEntity<String> select(@RequestBody String body, @RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException {
 
-		//SelectRequest request = (SelectRequest) jsonUtil.toObject(body, SelectRequest.class);
+		SelectRequest request = (SelectRequest) jsonUtil.toObject(body, SelectRequest.class);
 
-		String response = bapSelectService.getSelectedSearchDetails(mentorId, httpHeaders);
-		logger.info("Selected Mentor Response from BG {} ",response);
+		String response = bapSelectService.getSelectedSearchDetails(request, httpHeaders);
+		logger.info("Selected Mentor Response from BPP {} ",response);
 		if(CommonUtil.isEmpty(response)) {
 			return ResponseEntity
 					.badRequest()

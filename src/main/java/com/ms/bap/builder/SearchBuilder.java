@@ -27,25 +27,24 @@ public class SearchBuilder {
     ObjectMapper objectMapper;
 
 
-    public SearchRequest buildSkillSearchRequest(String bgSubscriberUrl, String searchSkill) throws UnknownHostException{
-        logger.info("buildSkillSearchRequest called== {} {} ",bgSubscriberUrl, searchSkill);
-        SearchRequest request = new SearchRequest();
+    public SearchRequest buildSkillSearchRequest(String bgSubscriberUrl, SearchRequest request) throws UnknownHostException{
+        logger.info("buildSkillSearchRequest called== {}",bgSubscriberUrl);
         Context context = this.responseBuilder.buildContext(bgSubscriberUrl, ContextAction.SEARCH.value());
         logger.info("returned Context {} ",context);
         request.setContext(context);
-        SearchMessage msg= buildSearchMessageBody(searchSkill);
+        SearchMessage msg= buildSearchMessageBody(request);
         logger.info("returned msg {} ",msg);
         request.setMessage(msg);
         logger.info("Built search request {} ",request);
         return request;
     }
 
-    public SearchMessage buildSearchMessageBody(String searchSkill){
+    public SearchMessage buildSearchMessageBody(SearchRequest request){
         SearchMessage msg= new SearchMessage();
         Intent intent= new Intent();
         Item item= new Item();
         Descriptor descriptor= new Descriptor();
-        descriptor.setName(searchSkill);
+        descriptor.setName(request.getMessage().getIntent().getItem().getDescriptor().getName());
         item.setDescriptor(descriptor);
         intent.setItem(item);
         msg.setIntent(intent);

@@ -19,8 +19,8 @@ public class BapSearchService {
 	@Autowired
 	BapCommonService commonService;
 
-	public String getSkillSearchResult(String bgSubscriberUrl, String searchSkill, HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException {
-		return commonService.sendSearchRequest(bgSubscriberUrl,searchSkill,httpHeaders);
+	public String getSkillSearchResult(String bgSubscriberUrl, SearchRequest request, HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException, InterruptedException {
+		return commonService.sendSearchRequest(bgSubscriberUrl,request,httpHeaders);
 	}
 
 }

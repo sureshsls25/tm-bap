@@ -29,22 +29,21 @@ public class StatusBuilder {
     ObjectMapper objectMapper;
 
 
-    public StatusRequest buildStatusRequest(String menteeEmailId) throws UnknownHostException{
-        logger.info("buildStatusRequest called== {} {} ",menteeEmailId);
-        StatusRequest request = new StatusRequest();
-        Context context = this.responseBuilder.commonBuildContext(menteeEmailId, ContextAction.STATUS.value());
+    public StatusRequest buildStatusRequest(String bgSubscriberUrl,StatusRequest request) throws UnknownHostException{
+        logger.info("buildStatusRequest called== {}");
+        Context context = this.responseBuilder.buildContext(bgSubscriberUrl, ContextAction.STATUS.value());
         logger.info("returned Context {} ",context);
         request.setContext(context);
-        StatusMessage msg= buildStatusMessageBody(menteeEmailId);
+        StatusMessage msg= buildStatusMessageBody(request);
         logger.info("returned msg {} ",msg);
         request.setMessage(msg);
         logger.info("Built status request {} ",request);
         return request;
     }
 
-    public StatusMessage buildStatusMessageBody(String menteeEmailId){
+    public StatusMessage buildStatusMessageBody(StatusRequest request){
         StatusMessage msg= new StatusMessage();
-        msg.setMailId(menteeEmailId);
+        msg.setMailId(request.getMessage().getMailId());
         logger.info("StatusMessage details== {}",msg);
         return msg;
     }

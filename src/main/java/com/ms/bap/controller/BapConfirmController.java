@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.UnknownHostException;
 
 @RestController
-@RequestMapping(ApplicationConstant.EXTERNAL_CONTEXT_ROOT)
+//@RequestMapping(ApplicationConstant.EXTERNAL_CONTEXT_ROOT)
 public class BapConfirmController {
 
 	private static final Logger logger = LoggerFactory.getLogger(BapConfirmController.class);
@@ -38,12 +38,12 @@ public class BapConfirmController {
 	private String confirmErrResponse;
 
 	@PostMapping(path = "/confirm", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> confirm(@RequestParam("id") String confirmId, @RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException {
+	public ResponseEntity<String> confirm(@RequestBody String body, @RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException {
 
-		//ConfirmRequest request = (ConfirmRequest) jsonUtil.toObject(body, ConfirmRequest.class);
+		ConfirmRequest request = (ConfirmRequest) jsonUtil.toObject(body, ConfirmRequest.class);
 
-		String response = bapConfirmService.getConfirmationResult(confirmId, httpHeaders);
-		logger.info("Confirmation Response from BG"+response);
+		String response = bapConfirmService.getConfirmationResult(request, httpHeaders);
+		logger.info("Confirmation Response from BPP {} ",response);
 		if(CommonUtil.isEmpty(response)) {
 			return ResponseEntity
 					.badRequest()

@@ -19,8 +19,8 @@ public class BapConfirmService {
 	@Autowired
 	BapCommonService commonService;
 
-	public String getConfirmationResult(String confirmId, HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException {
-		return commonService.sendConfirmRequest(confirmId,httpHeaders);
+	public String getConfirmationResult(ConfirmRequest request, HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException {
+		return commonService.sendConfirmRequest(request,httpHeaders);
 	}
 
 }

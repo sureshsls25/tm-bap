@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
+import java.util.LinkedHashMap;
 
 @RestController
 //@RequestMapping(ApplicationConstant.EXTERNAL_CONTEXT_ROOT)
@@ -52,15 +53,14 @@ public class BapSearchController {
 	@Value("${bap.app.bg.status}")
 	private String bgStatus;
 
-
 	@GetMapping(path = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> search(@RequestParam("skill") String searchSkill, @RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException, JSONException {
+	public ResponseEntity<String> search(@RequestBody String body, @RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException, JSONException, InterruptedException {
 
-		//SearchRequest request = (SearchRequest) jsonUtil.toObject(body, SearchRequest.class);
+		SearchRequest request = (SearchRequest) jsonUtil.toObject(body, SearchRequest.class);
 		String bppUrl= bgGateWaySearchService.getBGGatewayUri(new BGGateWayLookupRequest(bgDomain,bgType,bgStatus),httpHeaders);
 		logger.info("Returned BPP Url {} ",bppUrl);
-		String response = bapSearchService.getSkillSearchResult(CommonUtil.buildBPPUrl(bppUrl, ContextAction.SEARCH.value()), searchSkill, httpHeaders);
-		logger.info("Skill Search Response from BG {} ",response);
+		String response = bapSearchService.getSkillSearchResult(CommonUtil.buildBPPUrl(bppUrl, ContextAction.SEARCH.value()), request, httpHeaders);
+		logger.info("Returned Skill Search Response from BPP{} ",response);
 		if(CommonUtil.isEmpty(response)) {
 			return ResponseEntity
 					.badRequest()
@@ -75,6 +75,7 @@ public class BapSearchController {
 		OnSearchRequest request = (OnSearchRequest) jsonUtil.toObject(body, OnSearchRequest.class);
 		String responseJson= objectMapper.writeValueAsString(request);
 		logger.info("Actual Response from BPP {}", responseJson);
+		new CommonUtil().buildFinalSearchResp(request.getContext().getMessageId(), request);
 		return new ResponseEntity<>(responseJson,HttpStatus.OK);
 	}
 

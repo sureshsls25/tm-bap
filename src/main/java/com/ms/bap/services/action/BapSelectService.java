@@ -19,8 +19,8 @@ public class BapSelectService {
 
 	@Autowired
 	BapCommonService commonService;
-	public String getSelectedSearchDetails(String mentorId, HttpHeaders httpHeaders) throws UnknownHostException, JsonProcessingException {
-		return commonService.sendSelectedMentorRequest(mentorId,httpHeaders);
+	public String getSelectedSearchDetails(SelectRequest request, HttpHeaders httpHeaders) throws UnknownHostException, JsonProcessingException {
+		return commonService.sendSelectedMentorRequest(request,httpHeaders);
 	}
 
 }

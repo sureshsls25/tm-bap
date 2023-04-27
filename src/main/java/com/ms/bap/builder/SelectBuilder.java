@@ -28,24 +28,23 @@ public class SelectBuilder {
     ObjectMapper objectMapper;
 
 
-    public SelectRequest buildSelectedMentorRequest(String mentorId) throws UnknownHostException{
-        logger.info("buildSelectedMentorRequest called== {} {} ",mentorId);
-        SelectRequest request = new SelectRequest();
-        Context context = this.responseBuilder.commonBuildContext(mentorId, ContextAction.SELECT.value());
+    public SelectRequest buildSelectedMentorRequest(SelectRequest request) throws UnknownHostException{
+        logger.info("buildSelectedMentorRequest called== {}");
+        Context context = this.responseBuilder.selectBuildContext(request, ContextAction.SELECT.value());
         logger.info("returned Context {} ",context);
         request.setContext(context);
-        SelectMessage msg= buildSelectedMentorMessageBody(mentorId);
+        SelectMessage msg= buildSelectedMentorMessageBody(request);
         request.setMessage(msg);
         logger.info("Built selected Mentor request {} ",request);
         return request;
     }
 
-    public SelectMessage buildSelectedMentorMessageBody(String mentorId){
+    public SelectMessage buildSelectedMentorMessageBody(SelectRequest request){
         SelectMessage msg= new SelectMessage();
         Order order= new Order();
         List<Item> items= new ArrayList<>();
         Item item= new Item();
-        item.setId(mentorId);
+        item.setId(request.getMessage().getOrder().getItems().get(0).getId());
         items.add(item);
         order.setItems(items);
         msg.setOrder(order);
