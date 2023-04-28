@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin
 @RequestMapping(ApplicationConstant.CONTEXT_ROOT)
 public class UsersController {
 

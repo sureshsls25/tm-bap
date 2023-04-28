@@ -28,6 +28,7 @@ import java.net.UnknownHostException;
 import java.util.LinkedHashMap;
 
 @RestController
+@CrossOrigin
 //@RequestMapping(ApplicationConstant.EXTERNAL_CONTEXT_ROOT)
 public class BapSearchController {
 
@@ -53,7 +54,7 @@ public class BapSearchController {
 	@Value("${bap.app.bg.status}")
 	private String bgStatus;
 
-	@GetMapping(path = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> search(@RequestBody String body, @RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException, JSONException, InterruptedException {
 
 		SearchRequest request = (SearchRequest) jsonUtil.toObject(body, SearchRequest.class);

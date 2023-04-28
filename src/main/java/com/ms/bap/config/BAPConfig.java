@@ -27,4 +27,6 @@ public class BAPConfig {
     public InternalResourceViewResolver defaultViewResolver() {
         return new InternalResourceViewResolver();
     }
+
+
 }

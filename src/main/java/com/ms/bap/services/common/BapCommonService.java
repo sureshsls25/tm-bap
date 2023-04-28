@@ -95,13 +95,14 @@ public class BapCommonService {
         return confirmResp;
     }
 
-    public String sendStatusRequest(String bgSubscriberUrl, StatusRequest request, HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException, InterruptedException {
-        StatusRequest statusRequest= statusBuilder.buildStatusRequest(bgSubscriberUrl,request);
+    public String sendStatusRequest(String bgSubscriberUrl, HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException, InterruptedException {
+        StatusRequest statusRequest= statusBuilder.buildStatusRequest(bgSubscriberUrl);
         //String statusUri = statusRequest.getContext().getBppUri();
         String statusUri = bppUri.concat("/" + ContextAction.STATUS.value());
         String json = objectMapper.writeValueAsString(statusRequest);
         logger.info("Sending Request to BPP status {}", json);
         String statusResp= sender.sendWithTemplate(statusUri, httpHeaders, json);
+        //String statusResp= sender.send(statusUri, httpHeaders, json);
         OnStatusRequest onStatusRequest= (OnStatusRequest) jsonUtil.toObject(statusResp,OnStatusRequest.class);
         Thread.sleep(2000);
         logger.info("Getting  Resp from BPP status {}", onStatusRequest.getMessage());

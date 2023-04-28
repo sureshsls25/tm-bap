@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin()
 //@RequestMapping(ApplicationConstant.EXTERNAL_CONTEXT_ROOT)
 public class BapStatusController {
 
@@ -57,12 +58,12 @@ public class BapStatusController {
 
 
 	@PostMapping(path = "/status", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> status(@RequestBody String body, @RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException, JSONException, InterruptedException {
+	public ResponseEntity<String> status(@RequestBody String body,@RequestHeader HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException, JSONException, InterruptedException {
 
-		StatusRequest request = (StatusRequest) jsonUtil.toObject(body, StatusRequest.class);
+		//StatusRequest request = (StatusRequest) jsonUtil.toObject(body, StatusRequest.class);
 		String bppUrl= bgGateWaySearchService.getBGGatewayUri(new BGGateWayLookupRequest(bgDomain,bgType,bgStatus),httpHeaders);
 		logger.info("Returned BPP Url {} ",bppUrl);
-		String response = bapStatusService.getStatusResult(CommonUtil.buildBPPUrl(bppUrl, ContextAction.STATUS.value()),request, httpHeaders);
+		String response = bapStatusService.getStatusResult(CommonUtil.buildBPPUrl(bppUrl, ContextAction.STATUS.value()), httpHeaders);
 		logger.info("Order Status Response from BPP {} ",response);
 		if(CommonUtil.isEmpty(response)) {
 			return ResponseEntity

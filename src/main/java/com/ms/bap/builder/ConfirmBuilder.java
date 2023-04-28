@@ -45,13 +45,13 @@ public class ConfirmBuilder {
         Context context = this.responseBuilder.confirmBuildContext(request, ContextAction.CONFIRM.value());
         logger.info("returned Context {} ",context);
         request.setContext(context);
-        ConfirmMessage msg= buildSearchMessageBody(request);
+        ConfirmMessage msg= buildConfirmMessageBody(request);
         request.setMessage(msg);
         logger.info("Built Confirm request {} ",request);
         return request;
     }
 
-    public ConfirmMessage buildSearchMessageBody(ConfirmRequest request){
+    public ConfirmMessage buildConfirmMessageBody(ConfirmRequest request){
         ConfirmMessage msg= new ConfirmMessage();
         Order order= new Order();
         Provider provider= new Provider();

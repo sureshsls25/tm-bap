@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.UnknownHostException;
 
 @RestController
+@CrossOrigin
 //@RequestMapping(ApplicationConstant.EXTERNAL_CONTEXT_ROOT)
 public class BapSelectController {
 	private static final Logger logger = LoggerFactory.getLogger(BapSelectController.class);

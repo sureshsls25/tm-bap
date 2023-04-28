@@ -1,6 +1,8 @@
 package com.ms.bap.builder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ms.bap.services.auth.UserDetailsImpl;
+import com.ms.bap.util.CommonUtil;
 import com.ms.common.enums.ContextAction;
 import com.ms.common.model.common.Context;
 import com.ms.common.model.common.Descriptor;
@@ -29,21 +31,23 @@ public class StatusBuilder {
     ObjectMapper objectMapper;
 
 
-    public StatusRequest buildStatusRequest(String bgSubscriberUrl,StatusRequest request) throws UnknownHostException{
+    public StatusRequest buildStatusRequest(String bgSubscriberUrl) throws UnknownHostException{
         logger.info("buildStatusRequest called== {}");
+        StatusRequest request= new StatusRequest();
         Context context = this.responseBuilder.buildContext(bgSubscriberUrl, ContextAction.STATUS.value());
         logger.info("returned Context {} ",context);
         request.setContext(context);
-        StatusMessage msg= buildStatusMessageBody(request);
+        StatusMessage msg= buildStatusMessageBody();
         logger.info("returned msg {} ",msg);
         request.setMessage(msg);
         logger.info("Built status request {} ",request);
         return request;
     }
 
-    public StatusMessage buildStatusMessageBody(StatusRequest request){
+    public StatusMessage buildStatusMessageBody(){
         StatusMessage msg= new StatusMessage();
-        msg.setMailId(request.getMessage().getMailId());
+        UserDetailsImpl userDetails = CommonUtil.getCurrentUserDetails();
+        msg.setMailId(userDetails.getEmail());
         logger.info("StatusMessage details== {}",msg);
         return msg;
     }

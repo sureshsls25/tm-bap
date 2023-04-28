@@ -18,8 +18,8 @@ public class BapStatusService {
 
 	@Autowired
 	BapCommonService commonService;
-	public String getStatusResult(String bgSubscriberUrl,StatusRequest request, HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException, InterruptedException {
-		return commonService.sendStatusRequest(bgSubscriberUrl,request,httpHeaders);
+	public String getStatusResult(String bgSubscriberUrl, HttpHeaders httpHeaders) throws JsonProcessingException, UnknownHostException, InterruptedException {
+		return commonService.sendStatusRequest(bgSubscriberUrl,httpHeaders);
 	}
 
 }

@@ -54,7 +54,7 @@ public class ResponseBuilder {
         context.setDomain(this.domain);
         context.setAction(action);
         context.setBppUri(bgSubscriberUrl);
-        //context.setBppUri(bppUri.concat("/search"));
+        //context.setBppUri(bppUri.concat("/"+action));
         context.setBapId(bapId);
         context.setBapUri(bapUri);
         context.setTimestamp(CommonUtil.getDateTimeString(new Date()));
@@ -74,35 +74,45 @@ public class ResponseBuilder {
 
     public Context confirmBuildContext(ConfirmRequest request, String action) {
         logger.info("confirmBuildContext called == {}", action);
-        OnSearchRequest searchResp= CommonUtil.getFinalSearchResp().values().stream().filter(req ->
-                req.getMessage().getCatalog().getBppProviders().get(0).getAgent().getPerson().getId().equalsIgnoreCase(request.getMessage().getOrder().getProvider().getAgent().getPerson().getId())).findAny().get();
-        Context context = buildSearchContext(searchResp, action);
-        return context;
+        try{
+            OnSearchRequest searchResp= CommonUtil.getFinalSearchResp().values().stream().filter(req ->
+                    req.getMessage().getCatalog().getBppProviders().get(0).getAgent().getPerson().getId().equalsIgnoreCase(request.getMessage().getOrder().getProvider().getAgent().getPerson().getId())).findAny().get();
+            Context context = buildSearchContext(searchResp, action);
+            return context;
+        }catch (Exception e){
+            logger.error("confirmBuildContext error {} ",e.getMessage());
+        }
+        return null;
     }
 
 
     public Context buildSearchContext(OnSearchRequest searchResp, String action){
-        Context context= new Context();
-        if(!ObjectUtils.isEmpty(searchResp)){
-            bppUri= searchResp.getContext().getBppUri();
-            bapId= searchResp.getContext().getBapId();
-            bapUri= searchResp.getContext().getBapUri();
-            bppId=  searchResp.getContext().getBapId();
-            msgId=  searchResp.getContext().getMessageId();
-            transId=  searchResp.getContext().getTransactionId();
-        }
-        context.setDomain(this.domain);
-        context.setAction(action);
-        context.setBppUri(bppUri);
-        context.setBapId(bapId);
-        context.setBapUri(bapUri);
-        context.setBppId(bppId);
-        context.setTimestamp(CommonUtil.getDateTimeString(new Date()));
-        context.setMessageId(msgId);
-        context.setTransactionId(transId);
-        logger.info("Generated "+action+" Request Context== {}",context);
+        try {
+            Context context = new Context();
+            if (!ObjectUtils.isEmpty(searchResp)) {
+                bppUri = searchResp.getContext().getBppUri();
+                bapId = searchResp.getContext().getBapId();
+                bapUri = searchResp.getContext().getBapUri();
+                bppId = searchResp.getContext().getBapId();
+                msgId = searchResp.getContext().getMessageId();
+                transId = searchResp.getContext().getTransactionId();
+            }
+            context.setDomain(this.domain);
+            context.setAction(action);
+            context.setBppUri(bppUri);
+            context.setBapId(bapId);
+            context.setBapUri(bapUri);
+            context.setBppId(bppId);
+            context.setTimestamp(CommonUtil.getDateTimeString(new Date()));
+            context.setMessageId(msgId);
+            context.setTransactionId(transId);
+            logger.info("Generated " + action + " Request Context== {}", context);
 
-        return context;
+            return context;
+        }catch(Exception e){
+            logger.error("buildSearchContext error {} ",e.getMessage());
+        }
+        return null;
     }
 
 
